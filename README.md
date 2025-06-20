@@ -14,6 +14,12 @@ A Python-based facial recognition attendance system using `face_recognition`, `O
 
 ---
 
+## 🚀 Demo
+
+![App Demo Screenshot](demo.jpeg) <!-- Optional: Add a screenshot of your app running -->
+
+---
+
 ## 🧰 Technologies Used
 
 - [Python 3.12.0](https://www.python.org/)
