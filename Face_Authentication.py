@@ -72,7 +72,12 @@ class AttendanceApp:
         Student_List.initialize()
         for i,x in enumerate(Student_List.students):
             if(x.encoding == None):
-                messagebox.showerror("Error", f"{x.name} Encoding not Found!")
+                messagebox.showerror("Error", f"{x.name}'s Encoding not Found!")
+
+        # If No Students found in database 
+        if(len(Student_List.students)==0):
+            messagebox.showerror("Data Error", "No Student Encodings found!")
+            root.destroy()
                 
         self.update_frame()
         
@@ -110,10 +115,11 @@ class AttendanceApp:
         frame_encoding = face_recognition.face_encodings(captured_frame)[0]
 
         for i,x in enumerate(Student_List.students):
-            results = face_recognition.compare_faces([x.encoding], frame_encoding)
-            if(results[0] == True):
-                x.is_present = True
-                return x
+            if x.encoding != None:
+                results = face_recognition.compare_faces([x.encoding], frame_encoding)
+                if(results[0] == True):
+                    x.is_present = True
+                    return x
         
         return None
 
