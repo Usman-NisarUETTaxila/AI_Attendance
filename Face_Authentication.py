@@ -15,9 +15,14 @@ class Student:
 
     def compute_encoding(self):
         # Encoding self_image 
-        self_image = face_recognition.load_image_file(self.image_path)
-        self.encoding = face_recognition.face_encodings(self_image)[0]
-
+        try:
+            image = face_recognition.load_image_file('path/to/image.jpg')
+            self.encoding = face_recognition.face_encodings(self_image)[0]
+        except FileNotFoundError:
+            self.encoding = None
+        except Exception as e:
+            self.encoding = None
+        
 class Student_List:
     students = []
 
@@ -33,12 +38,16 @@ class Student_List:
         
 class AttendanceApp:
     def __init__(self, root):
+        # GUI App
         self.root = root
         self.root.title("AI Attendance System")
         self.cap = cv2.VideoCapture(0)
+
+        # Guard Clause If Camera Not Available
         if not self.cap.isOpened():
             messagebox.showerror("Error", "Could not open camra")
             root.destroy()
+        
         self.title_label = Label(root, text="📸 AI Attendance System", font=("Helvetica", 40, "bold"))
         self.title_label.pack(pady=10)
         self.video_label = Label(root)
@@ -46,17 +55,27 @@ class AttendanceApp:
         self.root.configure(bg="#00000A")
         self.mark_btn = Button(root,text="Mark Attendance",font=("Arial", 14, "bold"),fg="white",bg="#00FFFF",activebackground="#00CED1",activeforeground="black",relief="raised",bd=3,command=self.mark_attendance)
         self.mark_btn.pack(pady=10)
+
+        # Event Handling 
         def on_enter(e):
             self.mark_btn['background'] = '#00CED1'
             self.mark_btn['foreground'] = 'black'
         def on_leave(e):
             self.mark_btn['background'] = '#00FFFF'
             self.mark_btn['foreground'] = 'white'
+            
         # Bind hover events
         self.mark_btn.bind("<Enter>", on_enter)
         self.mark_btn.bind("<Leave>", on_leave)
+
+        # Initializing Students
         Student_List.initialize()
+        for i,x in enumerate(Student_List.students):
+            if(x.encoding == None):
+                messagebox.showerror("Error", f"{x.name} Encoding not Found!")
+                
         self.update_frame()
+        
     def update_frame(self):
         ret, frame = self.cap.read()
         if not ret:
@@ -71,6 +90,7 @@ class AttendanceApp:
             self.video_label.imgtk = imgtk
             self.video_label.configure(image=imgtk)
             self.root.after(30, self.update_frame)
+            
     def mark_attendance(self):
         if hasattr(self, 'current_frame'):
             img = self.current_frame
