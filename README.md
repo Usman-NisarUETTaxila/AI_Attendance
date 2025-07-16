@@ -56,4 +56,8 @@ Student_List.add_to_students("Your Name", False, "your_photo.jpg")
 python Face_Authentication.py
 ```
 ## Authors
-Developed by Usman Nisar, Hasaan Ayub, Momin Hayat, Shaleem Raza @UETTaxila
+[Usman Nisar](https://github.com/Usman-NisarUETTaxila)
+[Hassaan Ayub](https://github.com/hassaan1821)
+Momin Hayat
+Shaleem Raza
+@UETTaxila
